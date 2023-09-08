@@ -1,0 +1,28 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: jworld-api
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: "jdbc:postgresql://localhost:5499/jworld"
+    username: "postgres"
+    password: "postgres"
+    testOnBorrow: true
+    testWhileIdle: true
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 30000
+    validationQuery: SELECT 1
+    max-active: 5
+    max-idle: 2
+    max-wait: 8000
+    jpa:
+      show-sql: true
+
+flyway:
+  url: "jdbc:postgresql://localhost:5499/jworld"
+  schemas: public
+  user: "${spring.datasource.username}"
+  password: "${spring.datasource.password}"
+

@@ -1,0 +1,3 @@
+<div *ngFor="let talk of talks$ | async">
+  <a [routerLink]="[talk.id]">{{talk.speaker}} -> {{talk.title}}</a>
+</div>

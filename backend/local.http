@@ -1,0 +1,12 @@
+GET http://localhost:8080/talks
+
+###
+GET http://localhost:8080/talks/1/votes
+
+###
+PUT http://localhost:8080/talks/1/votes
+Content-Type: application/json
+
+{
+  "value": 4
+}

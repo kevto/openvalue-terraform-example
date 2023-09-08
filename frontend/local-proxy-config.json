@@ -1,0 +1,10 @@
+{
+  "/talks":{
+    "target":"http://localhost:8080/talks",
+    "secure": false
+  },
+  "/talks/*":{
+    "target":"https://localhost:8080/talks/",
+    "secure": false
+  }
+}

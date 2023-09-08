@@ -1,0 +1,9 @@
+*/target/
+*.class
+*.jar
+*.zip
+*.tfstate*
+.terraform.*
+*/node_modules/
+.idea/
+.terraform/
