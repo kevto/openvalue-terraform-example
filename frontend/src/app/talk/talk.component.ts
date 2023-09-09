@@ -3,6 +3,7 @@ import {ApiService} from "../api.service";
 import {Observable} from "rxjs";
 import {Talk, Vote} from "../models";
 import {ActivatedRoute, Router} from "@angular/router";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 
 @Component({
   selector: 'talk',
@@ -11,11 +12,17 @@ import {ActivatedRoute, Router} from "@angular/router";
 })
 export class TalkComponent implements OnInit {
 
+  talkId: string | null = null
   talk: Talk | undefined
   score = 0
   validVotes = 0
 
+  voteFormGroup: FormGroup = new FormGroup({
+    vote: new FormControl('', Validators.required),
+  });
+
   constructor(private api: ApiService, private route: ActivatedRoute, private router: Router) {
+    api.talk$.subscribe(talk => this.talk = talk)
     api.votes$.subscribe(votes => {
       this.calculateScore(votes)
     })
@@ -23,14 +30,14 @@ export class TalkComponent implements OnInit {
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
-      const foundId = params.get("id");
-      if (foundId == undefined) {
+      this.talkId = params.get("id");
+      if (this.talkId == undefined) {
         this.router.navigate(["/"])
         return
       }
 
-      this.api.getTalk(foundId, () => this.router.navigate(["/"]));
-      this.api.getVotes(foundId)
+      this.api.getTalk(this.talkId, () => this.router.navigate(["/"]));
+      this.api.getVotes(this.talkId)
     })
   }
 
@@ -43,12 +50,17 @@ export class TalkComponent implements OnInit {
     })
 
     const totalValidVotes = votes.length - voteNotValid
-    if (totalValidVotes < 0) {
+    if (totalValidVotes <= 0) {
       this.validVotes = 0
       this.score = 0
     } else {
       this.validVotes = totalValidVotes
       this.score = voteSum / totalValidVotes
     }
+  }
+
+  vote() {
+    this.api.putVote(this.talkId!!, this.voteFormGroup.get("vote")?.value,
+        () => this.api.getVotes(this.talkId!!))
   }
 }

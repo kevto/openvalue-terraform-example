@@ -8,6 +8,7 @@ import {HttpClientModule} from "@angular/common/http";
 import {Router, RouterModule, Routes} from "@angular/router";
 import {ApiService} from "./api.service";
 import {TalkComponent} from "./talk/talk.component";
+import {ReactiveFormsModule} from "@angular/forms";
 
 
 const routes: Routes = [
@@ -24,12 +25,13 @@ const routes: Routes = [
     TalksComponent,
     TalkComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    RouterModule.forRoot(routes)
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        RouterModule.forRoot(routes),
+        ReactiveFormsModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

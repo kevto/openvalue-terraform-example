@@ -30,6 +30,7 @@ resource "google_sql_database" "jworld" {
 }
 
 # Creating Cloud Run instances
+# Creating a policy to all everyone invoke the Cloud Run instances
 
 data "google_iam_policy" "noauth" {
   binding {
@@ -39,6 +40,8 @@ data "google_iam_policy" "noauth" {
     ]
   }
 }
+
+# Api application
 
 resource "google_cloud_run_v2_service" "jworld_api" {
   name     = "jworld-api"
@@ -58,7 +61,7 @@ resource "google_cloud_run_v2_service" "jworld_api" {
     }
 
     containers {
-      image = "europe-west1-docker.pkg.dev/${var.gcloud_project_id}/jworld/jworld-api:0.0.6"
+      image = "europe-west1-docker.pkg.dev/${var.gcloud_project_id}/jworld/jworld-api:0.0.7"
 
       ports {
         container_port = 8080
@@ -87,5 +90,43 @@ resource "google_cloud_run_v2_service_iam_policy" "jworld_api_noauth" {
   project = google_cloud_run_v2_service.jworld_api.project
   location = google_cloud_run_v2_service.jworld_api.location
   name = google_cloud_run_v2_service.jworld_api.name
+  policy_data = data.google_iam_policy.noauth.policy_data
+}
+
+# Frontend application
+
+resource "google_cloud_run_v2_service" "jworld_app" {
+  name     = "jworld-app"
+  location = "europe-west1"
+  ingress = "INGRESS_TRAFFIC_ALL"
+
+  template {
+    scaling {
+      max_instance_count = 1
+    }
+
+    containers {
+      image = "europe-west1-docker.pkg.dev/${var.gcloud_project_id}/jworld/jworld-app:0.0.6"
+
+      ports {
+        container_port = 80
+      }
+      env {
+        name = "API_URL"
+        value = google_cloud_run_v2_service.jworld_api.uri
+      }
+    }
+  }
+
+  traffic {
+    type = "TRAFFIC_TARGET_ALLOCATION_TYPE_LATEST"
+    percent = 100
+  }
+}
+
+resource "google_cloud_run_v2_service_iam_policy" "jworld_app_noauth" {
+  project = google_cloud_run_v2_service.jworld_app.project
+  location = google_cloud_run_v2_service.jworld_app.location
+  name = google_cloud_run_v2_service.jworld_app.name
   policy_data = data.google_iam_policy.noauth.policy_data
 }

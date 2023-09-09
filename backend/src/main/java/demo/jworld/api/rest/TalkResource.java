@@ -31,6 +31,11 @@ public class TalkResource {
         return talks.findAll();
     }
 
+    @GetMapping("/talks/{talkId}")
+    Talk getTalk(@PathVariable Long talkId) {
+        return talks.findById(talkId).orElse(null);
+    }
+
     @GetMapping("/talks/{talkId}/votes")
     List<Vote> getTalkVotes(@PathVariable Long talkId) {
         var talkResult = talks.findById(talkId);

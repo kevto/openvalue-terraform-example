@@ -40,7 +40,9 @@ export class ApiService {
     })
   }
 
-  putVote(id: string, value: number) {
-    this.http.put(this.url + "/talks/" + id + "/votes", {value: value}).subscribe()
+  putVote(id: string, value: number, completeCallback: () => void) {
+    this.http.put(this.url + "/talks/" + id + "/votes", {value: value}).subscribe({
+      complete: completeCallback
+    })
   }
 }

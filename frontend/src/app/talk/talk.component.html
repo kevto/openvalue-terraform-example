@@ -1,6 +1,22 @@
 <div *ngIf="talk">
-  <div>Title: {{talk.title}}</div>
-  <div>Speaker: {{talk.speaker}}</div>
-  <div>Description: {{talk.description}}</div>
-  <div>Score:  (total votes: )</div>
+  <div><span class="details-header">Title:</span> {{talk.title}}</div>
+  <div><span class="details-header">Speaker:</span> {{talk.speaker}}</div>
+  <div><span class="details-header">Description:</span> {{talk.description}}</div>
+  <div><span class="details-header">Score:</span> {{score}} (total votes: {{validVotes}})</div>
+  <section id="vote">
+    <div>Cast your vote:</div>
+    <form [formGroup]="voteFormGroup">
+      <input type="radio" id="vote-1" name="vote" value="1" formControlName="vote">
+      <label for="vote-1">1</label>
+      <input type="radio" id="vote-2" name="vote" value="2" formControlName="vote">
+      <label for="vote-2">2</label>
+      <input type="radio" id="vote-3" name="vote" value="3" formControlName="vote">
+      <label for="vote-3">3</label>
+      <input type="radio" id="vote-4" name="vote" value="4" formControlName="vote">
+      <label for="vote-4">4</label>
+      <input type="radio" id="vote-5" name="vote" value="5" formControlName="vote">
+      <label for="vote-5">5</label>
+    </form>
+    <button (click)="vote()" [disabled]="!voteFormGroup.get('vote')?.value">Vote!</button>
+  </section>
 </div>
