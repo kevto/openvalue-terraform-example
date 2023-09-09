@@ -107,5 +107,8 @@
       }
     }
   },
-  "defaultProject": "jworld"
+  "defaultProject": "jworld",
+  "cli": {
+    "analytics": false
+  }
 }
