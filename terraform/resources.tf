@@ -21,7 +21,7 @@ resource "google_sql_database_instance" "jworld" {
 
   root_password = random_password.db_root_password.result
 
-  deletion_protection  = "true"
+  deletion_protection  = "false" # Set to true on production
 }
 
 resource "google_sql_database" "jworld" {
@@ -106,7 +106,7 @@ resource "google_cloud_run_v2_service" "jworld_app" {
     }
 
     containers {
-      image = "europe-west1-docker.pkg.dev/${var.gcloud_project_id}/jworld/jworld-app:0.0.6"
+      image = "europe-west1-docker.pkg.dev/${var.gcloud_project_id}/jworld/jworld-app:0.0.7"
 
       ports {
         container_port = 80
